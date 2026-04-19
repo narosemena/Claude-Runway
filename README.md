@@ -51,12 +51,28 @@ Runway:  "This is a Standard-tier project — multi-file, auth, a database.
 
 ## Install in 30 Seconds
 
-```bash
-# Available in every project
-cp -r claude-runway/ ~/.claude/skills/claude-runway/
+**Recommended — works on Mac, Linux, and Windows:**
 
-# Or just this project
-cp -r claude-runway/ .claude/skills/claude-runway/
+```bash
+# Install globally (available in every project)
+git clone https://github.com/narosemena/Claude-Runway ~/.claude/skills/claude-runway
+```
+
+**Windows (PowerShell or Git Bash):**
+```powershell
+git clone https://github.com/narosemena/Claude-Runway "$env:USERPROFILE\.claude\skills\claude-runway"
+```
+
+**Verify it installed:**
+```bash
+ls ~/.claude/skills/claude-runway/SKILL.md
+```
+
+You should see `SKILL.md` listed. If you don't, the clone went somewhere unexpected — check your current directory and try again.
+
+**To update later:**
+```bash
+cd ~/.claude/skills/claude-runway && git pull
 ```
 
 Then open Claude Code and say:
