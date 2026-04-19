@@ -235,7 +235,13 @@ Present identified risks before proceeding to configuration.
 
 ## Phase 3: Environment Configuration (Standard + Complex Only)
 
-Generate artifacts based on discovery. Present each for review before writing to disk.
+Generate artifact content based on discovery. **Do not write any artifact to disk yet** —
+hold all generated content in memory until Phase 4.1 (ecosystem scan) completes. The scan
+may surface conflicts or missing tools that change the stack, tooling, or verification
+commands, making a pre-scan CLAUDE.md stale before the session even starts.
+
+Present each artifact to the user for review during Phase 3. Write to disk only after
+Phase 4.1 confirms the environment is healthy and any conflicts are resolved.
 
 ### 3.1 — CLAUDE.md Generation
 
@@ -246,6 +252,9 @@ Every line must be project-specific or operationally actionable.
 Verification Protocol (5-15 lines of executable commands), Testing Strategy (framework,
 location, test-first vs test-after), Terminology Map (as needed), Anti-Patterns (as needed),
 Progressive Disclosure Pointers (as needed).
+
+**Write trigger:** Content is generated here. File is written to disk in Phase 4.2,
+after the ecosystem scan validates no conflicts affect the stack or tooling decisions.
 
 → Full template and stack-specific examples: `references/claude-md-examples.md`
 
@@ -288,6 +297,12 @@ tooling to fill gaps.
 
 Quality-gated recommendations: Tier 1 (50+ stars, 60-day recency, documented, licensed)
 and Tier 2 (10+ stars, 6-month recency, has README). Nothing auto-installed.
+
+**Artifact commit gate:** Once the scan confirms the environment is clean (all critical
+issues resolved, no conflicts affecting the stack), write all Phase 3 artifacts to disk:
+CLAUDE.md, .claudeignore, settings.json, and any hook scripts. If the scan surfaces a
+critical conflict that changes the stack or tooling, update the relevant artifact content
+before writing. Do not write artifacts while any 🔴 critical issue remains unresolved.
 
 → Full scan protocol, quality gates, GitHub queries: `references/ecosystem-scanner.md`
 
@@ -417,7 +432,7 @@ building, or saving this for later?
 
 ## Anti-Patterns This Protocol Prevents
 
-- **Premature coding**: Skip discovery → Surface the risk, respect autonomy if they insist
+- **Premature coding**: Skip discovery → Surface the risk once, respect autonomy if they insist. When they confirm they want to bypass intake, run `rm -f .claude/intake-state.json` before generating the minimal starter prompt — do not leave a partial state file that would trigger a false rehydration offer next session.
 - **Monolithic CLAUDE.md**: Past 300 lines → Refactor into progressive disclosure
 - **Context window bloat**: Too many MCP servers added before audit → Run ecosystem scan first (Phase 4.1)
 - **Correction prompting**: Agent in failure loop → /rewind, not more messages
